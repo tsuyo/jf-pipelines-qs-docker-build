@@ -3,7 +3,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: myGitHub
-      path: tsuyo/MySourceRepo     # Replace with your Git repo  
+      path: tsuyo/jfrog-pipelines-quickstart-docker-build # Replace with your Git repo  
     branches:
         include: master
  

@@ -19,7 +19,7 @@ pipelines:
         type: DockerBuild
         configuration:
           affinityGroup: dockerGroup
-          dockerFileLocation: docker-build
+          dockerFileLocation: .
           dockerFileName: Dockerfile
           dockerImageName: 'artifactory1.tsuyo.org:8082/docker-local/myscratch'
           dockerImageTag: ${run_number}

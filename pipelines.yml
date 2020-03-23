@@ -3,7 +3,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: myGitHub
-      path: tsuyo/jfrog-pipelines-quickstart-docker-build # Replace with your Git repo  
+      path: tsuyo/jf-pipelines-qs-docker-build # Replace with your Git repo  
  
   - name: build_info_1_docker_build_push
     type: BuildInfo

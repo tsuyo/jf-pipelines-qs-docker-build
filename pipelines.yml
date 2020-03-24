@@ -13,7 +13,7 @@ resources:
       buildNumber: 1
 
 pipelines:
-  - name: pipeline_docker_build_push
+  - name: quickstart_docker_build
     steps:
       - name: docker_build
         type: DockerBuild

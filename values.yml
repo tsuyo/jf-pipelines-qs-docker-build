@@ -1,6 +1,6 @@
 myRepo:
   gitProvider: tsuyo_github
-  path: tsuyo/jfrog-pipelines--quickstart-hello-world
+  path: tsuyo/jfrog-pipelines--quickstart-docker-build-and-push
   branch: master
 myArtifactory:
   name: artifactory

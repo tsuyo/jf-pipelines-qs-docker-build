@@ -52,16 +52,7 @@ pipelines:
         execution:
           onStart:
             - echo "[TM] onStart"
-            - env
-          onSuccess:
-            - echo "[TM] onSuccess"
-            - env
-          onFailure:
-            - echo "[TM] onFailure"
-            - env
-          onComplete:
-            - echo "[TM] onComplete"
-            - env
+            - echo ${int_artifactory_apikey} | docker login --username admin --password-stdin jfrog.tsuyo.org
 
       - name: docker_push
         type: DockerPush

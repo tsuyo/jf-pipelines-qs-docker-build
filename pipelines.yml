@@ -1,3 +1,6 @@
+template: true
+valuesFilePath: ./values.yml
+
 resources:
   - name: dbp_repo
     type: GitRepo

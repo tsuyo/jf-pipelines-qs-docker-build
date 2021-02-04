@@ -1,2 +1,3 @@
-FROM jfrog.tsuyo.org/docker/alpine:latest
+# FROM jfrog.tsuyo.org/docker/alpine:latest
+FROM alpine:latest
 CMD ["echo", "Hello World!"]

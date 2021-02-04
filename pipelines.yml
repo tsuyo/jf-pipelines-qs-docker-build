@@ -51,8 +51,8 @@ pipelines:
             - name: {{ .Values.myArtifactory.name }}
         execution:
           onStart:
-            - echo "[TM] onStart"
-            - echo ${int_artifactory_apikey} | docker login --username admin --password-stdin jfrog.tsuyo.org
+            - echo "[TM] manually login to artifactory"
+            - echo ${int_{{ .Values.myArtifactory.name }}_apikey} | docker login --username {{ .Values.myArtifactory.username }} --password-stdin {{ .Values.myArtifactory.url }}
 
       - name: docker_push
         type: DockerPush

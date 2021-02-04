@@ -6,6 +6,8 @@ myArtifactory:
   name: artifactory
   pushRepo: docker-local
   promoteRepo: docker-dev-local
+  username: admin
+  url: jfrog.tsuyo.org
 docker:  
   image:
     name: jfrog.tsuyo.org/docker/dbp

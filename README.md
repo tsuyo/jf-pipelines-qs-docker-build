@@ -2,7 +2,7 @@
 
 Sources for [Pipeline Example: Docker Build and Push](https://www.jfrog.com/confluence/display/JFROG/Pipeline+Example%3A+Docker+Build+and+Push)
 
-# Prerequisites
+## Prerequisites
 
 - Integration
   - tsuyo_github: GitHub

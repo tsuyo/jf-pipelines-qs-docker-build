@@ -1,10 +1,14 @@
-# JFrog Pipelines Quickstart: Docker Build
+# JFrog Pipelines Quickstart: Docker Build and Push
 
-A real repo for [Pipeline Example: Docker Build](https://www.jfrog.com/confluence/display/JFROG/Pipeline+Example%3A+Docker+Build)
+Sources for [Pipeline Example: Docker Build and Push](https://www.jfrog.com/confluence/display/JFROG/Pipeline+Example%3A+Docker+Build+and+Push)
 
 # Prerequisites
 
-- Pipelines/Integration: myGitHub
-  - https://github.com/tsuyo/jf-pipelines-qs-docker-build (for pipelines.yml)
-- Pipelines/Integration: myArtifactory
+- Integration
+  - tsuyo_github: GitHub
+  - artifactory: Artifactory
+- Repos: 
   - docker-local (docker/local)
+  - docker-dev-local (docker/local)
+  - docker (docker/virtual)
+    - includes: docker-local

@@ -2,33 +2,33 @@ resources:
   - name: dbp_repo
     type: GitRepo
     configuration:
-      gitProvider: tsuyo_github
-      path: tsuyo/jfrog-pipelines--quickstart-docker-build-and-push
+      gitProvider: {{ .Values.myRepo.gitProvider }}
+      path: {{ .Values.myRepo.path }}
       branches:
-        include: master
+        include: {{ .Values.myRepo.branch }}
 
   - name: dbp_image
     type: Image
     configuration:
-      registry: artifactory
-      sourceRepository: docker_local
-      imageName: jfrog.tsuyo.org/docker/dbp
-      imageTag: latest
+      registry: {{ .Values.myArtifactory.name }}
+      sourceRepository: {{ .Values.myArtifactory.pushRepo }}
+      imageName: {{ .Values.docker.image.name }}
+      imageTag: {{ .Values.docker.image.tag }}
       autoPull: true
       
   - name: dbp_build_info
     type: BuildInfo
     configuration:
-      sourceArtifactory: artifactory
-      buildName: dbp_build
-      buildNumber: 1    
+      sourceArtifactory: {{ .Values.myArtifactory.name }}
+      buildName: {{ .Values.buildInfo.name }}
+      buildNumber: {{ .Values.buildInfo.number }}
 
   - name: dbp_promoted_build_info
     type: BuildInfo
     configuration:
-      sourceArtifactory: artifactory
-      buildName: dbp_build
-      buildNumber: 1
+      sourceArtifactory: {{ .Values.myArtifactory.name }}
+      buildName: {{ .Values.buildInfo.name }}
+      buildNumber: {{ .Values.buildInfo.number }}
       
 
 pipelines:
@@ -38,22 +38,22 @@ pipelines:
         type: DockerBuild
         configuration:
           affinityGroup: dbp_group
-          dockerFileLocation: .
-          dockerFileName: Dockerfile
-          dockerImageName: jfrog.tsuyo.org/docker/dbp
+          dockerFileLocation: {{ .Values.docker.file.location }}
+          dockerFileName: {{ .Values.docker.file.name }}
+          dockerImageName: {{ .Values.docker.image.name }}
           dockerImageTag: ${run_number}
           inputResources:
             - name: dbp_repo
           integrations:
-            - name: artifactory
+            - name: {{ .Values.myArtifactory.name }}
 
       - name: docker_push
         type: DockerPush
         configuration:
           affinityGroup: dbp_group
-          targetRepository: docker-local
+          targetRepository: {{ .Values.myArtifactory.pushRepo }}
           integrations:
-            - name: artifactory
+            - name: {{ .Values.myArtifactory.name }}
           inputSteps:
             - name: docker_build
           outputResources:
@@ -70,9 +70,9 @@ pipelines:
       - name: promote_dbp_build
         type: PromoteBuild
         configuration:
-          targetRepository: docker-dev-local
+          targetRepository: {{ .Values.myArtifactory.promoteRepo }}
           integrations:
-            - name: artifactory
+            - name: {{ .Values.myArtifactory.name }}
           inputResources:
             - name: dbp_build_info
           outputResources:

@@ -1,0 +1,18 @@
+myRepo:
+  gitProvider: tsuyo_github
+  path: tsuyo/jfrog-pipelines--quickstart-hello-world
+  branch: master
+myArtifactory:
+  name: artifactory
+  pushRepo: docker-local
+  promoteRepo: docker-dev-local
+docker:  
+  image:
+    name: jfrog.tsuyo.org/docker/dbp
+    tag: latest
+  file:
+    location: .
+    name: Dockerfile
+buildInfo:
+  name: dbp_build
+  number: 1  

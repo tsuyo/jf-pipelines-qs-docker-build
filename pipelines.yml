@@ -49,6 +49,19 @@ pipelines:
             - name: dbp_repo
           integrations:
             - name: {{ .Values.myArtifactory.name }}
+        execution:
+          onStart:
+            - echo "[TM] onStart"
+            - env
+          onSuccess:
+            - echo "[TM] onSuccess"
+            - env
+          onFailure:
+            - echo "[TM] onFailure"
+            - env
+          onComplete:
+            - echo "[TM] onComplete"
+            - env
 
       - name: docker_push
         type: DockerPush

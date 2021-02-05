@@ -52,7 +52,7 @@ pipelines:
         execution:
           onStart:
             - echo "[TM] manually login to artifactory"
-            - echo ${int_{{ .Values.myArtifactory.name }}_apikey} | docker login --username {{ .Values.myArtifactory.username }} --password-stdin {{ .Values.myArtifactory.url }}
+            - echo ${int_{{ .Values.myArtifactory.name }}_apikey} | docker login --username {{ .Values.myArtifactory.username }} --password-stdin ${int_artifactory_url}
 
       - name: docker_push
         type: DockerPush

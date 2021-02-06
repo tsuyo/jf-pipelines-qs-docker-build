@@ -9,7 +9,7 @@ myArtifactory:
   username: admin
 docker:  
   image:
-    name: jfrog.tsuyo.org/docker/dbp
+    name: platform.tsuyo.org/docker/dbp
     tag: latest
   file:
     location: .

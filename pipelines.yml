@@ -2,85 +2,80 @@ template: true
 valuesFilePath: ./values.yml
 
 resources:
-  - name: dbp_repo
+  - name: {{ .Values.gitRepo.name }}
     type: GitRepo
     configuration:
-      gitProvider: {{ .Values.myRepo.gitProvider }}
-      path: {{ .Values.myRepo.path }}
-      branches:
-        include: {{ .Values.myRepo.branch }}
+      gitProvider: {{ .Values.gitRepo.provider }}
+      path: {{ .Values.gitRepo.path }}
+      # branches:
+      #   include: {{ .Values.myRepo.branch }}
 
-  - name: dbp_image
-    type: Image
-    configuration:
-      registry: {{ .Values.myArtifactory.name }}
-      sourceRepository: {{ .Values.myArtifactory.pushRepo }}
-      imageName: {{ .Values.docker.image.name }}
-      imageTag: {{ .Values.docker.image.tag }}
-      autoPull: true
+  # - name: dbp_image
+  #   type: Image
+  #   configuration:
+  #     registry: {{ .Values.myArtifactory.name }}
+  #     sourceRepository: {{ .Values.myArtifactory.pushRepo }}
+  #     imageName: {{ .Values.docker.image.name }}
+  #     imageTag: {{ .Values.docker.image.tag }}
+  #     autoPull: true
       
-  - name: dbp_build_info
+  - name: {{ .Values.pipelines.name }}
     type: BuildInfo
     configuration:
-      sourceArtifactory: {{ .Values.myArtifactory.name }}
-      buildName: {{ .Values.buildInfo.name }}
-      buildNumber: {{ .Values.buildInfo.number }}
+      sourceArtifactory: {{ .Values.artifactory }}
 
-  - name: dbp_promoted_build_info
+  - name: "{{ .Values.pipelines.name }}_promoted"
     type: BuildInfo
     configuration:
-      sourceArtifactory: {{ .Values.myArtifactory.name }}
-      buildName: {{ .Values.buildInfo.name }}
-      buildNumber: {{ .Values.buildInfo.number }}
-      
+      sourceArtifactory: {{ .Values.artifactory }}      
 
 pipelines:
-  - name: pipeline_dbp
+  - name: {{ .Values.pipelines.name }}
     steps:
       - name: docker_build
         type: DockerBuild
         configuration:
-          affinityGroup: dbp_group
+          affinityGroup: {{ .Values.pipelines.name }}
           dockerFileLocation: {{ .Values.docker.file.location }}
           dockerFileName: {{ .Values.docker.file.name }}
           dockerImageName: {{ .Values.docker.image.name }}
           dockerImageTag: ${run_number}
           inputResources:
-            - name: dbp_repo
+            - name: {{ .Values.gitRepo.name }}
           integrations:
-            - name: {{ .Values.myArtifactory.name }}
+            - name: {{ .Values.artifactory }}
         execution:
           onStart:
             - echo "[TM] manually login to artifactory"
-            - echo ${int_{{ .Values.myArtifactory.name }}_apikey} | docker login --username {{ .Values.myArtifactory.username }} --password-stdin ${int_artifactory_url}
+            - echo ${int_{{ .Values.artifactory }}_apikey} | docker login --username {{ .Values.artifactoryRepo.username }} --password-stdin ${int_{{ .Values.artifactory }}_url}
 
       - name: docker_push
         type: DockerPush
         configuration:
-          affinityGroup: dbp_group
-          targetRepository: {{ .Values.myArtifactory.pushRepo }}
+          affinityGroup: {{ .Values.pipelines.name }}
+          targetRepository: {{ .Values.artifactoryRepo.target.name }}
           integrations:
-            - name: {{ .Values.myArtifactory.name }}
+            - name: {{ .Values.artifactory }}
           inputSteps:
             - name: docker_build
-          outputResources:
-            - name: dbp_image
+          # outputResources:
+          #   - name: dbp_image
 
-      - name: publish_dbp_build
+      - name: publish_build_info
         type: PublishBuildInfo
         configuration:
           inputSteps:
             - name: docker_push
           outputResources:
-            - name: dbp_build_info
+            - name: {{ .Values.pipelines.name }}
 
-      - name: promote_dbp_build
+      - name: promote_build
         type: PromoteBuild
         configuration:
-          targetRepository: {{ .Values.myArtifactory.promoteRepo }}
+          targetRepository: {{ .Values.artifactoryRepo.promote.name }}
           integrations:
-            - name: {{ .Values.myArtifactory.name }}
+            - name: {{ .Values.artifactory }}
           inputResources:
-            - name: dbp_build_info
+            - name: {{ .Values.pipelines.name }}
           outputResources:
-            - name: dbp_promoted_build_info
+            - name: "{{ .Values.pipelines.name }}_promoted"

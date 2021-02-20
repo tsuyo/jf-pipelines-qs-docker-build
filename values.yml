@@ -1,19 +1,21 @@
-myRepo:
-  gitProvider: tsuyo_github
+artifactory: artifactory
+pipelines:
+  name: quickstart_docker_build_and_push
+gitRepo:
+  name: github__tsuyo__jfrog_pipelines_quickstart__docker_build_and_push
+  provider: tsuyo_github
   path: tsuyo/jfrog-pipelines--quickstart-docker-build-and-push
-  branch: master
-myArtifactory:
-  name: artifactory
-  pushRepo: docker-local
-  promoteRepo: docker-dev-local
+  # branch: master
+artifactoryRepo:
+  target:
+    name: docker-local
+  promote:
+    name: docker-dev-local
   username: admin
-docker:  
+docker:
   image:
     name: platform.tsuyo.org/docker/dbp
-    tag: latest
+    # tag: latest
   file:
     location: .
     name: Dockerfile
-buildInfo:
-  name: dbp_build
-  number: 1
